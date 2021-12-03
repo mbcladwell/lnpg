@@ -5,7 +5,9 @@
   #:use-module (guix build-system gnu)
   #:use-module (gnu packages)
   #:use-module (gnu packages databases)
-  #:use-module (labsolns postgresql-client)
+  ;;  #:use-module (labsolns postgresql-client)
+;;  #:use-module (artanis artanis)
+  
   #:use-module (gnu packages autotools)
   #:use-module (gnu packages guile)
   #:use-module (gnu packages guile-xyz)
@@ -33,7 +35,11 @@
 					   (scripts-dir (string-append out "/scripts"))
 					   (bin-dir (string-append out "/bin"))
 					   (dummy (install-file "scripts/install-pg.sh" bin-dir))
-					   (dummy (mkdir-p scripts-dir)))            				       
+					   (dummy (mkdir-p scripts-dir))
+					   (home (getenv "$HOME"))
+					   (dummy (system*  "mkdir" "-p" "~/temp/test2222"))
+
+					   )            				       
 				       (copy-recursively "./scripts" scripts-dir)
 				       #t)))
 		       (add-after 'install 'wrap-install-pg
@@ -52,13 +58,16 @@
       ("texinfo" ,texinfo)    
      ))
   (inputs `(("guile" ,guile-3.0)
-	    ("gnuplot" ,gnuplot)))
-  (propagated-inputs `( ("artanis" ,artanis)
+	  ;;  ("gnuplot" ,gnuplot))
+	  ))
+  (propagated-inputs `(
+		       ("artanis" ,artanis)
 			("postgresql" ,postgresql)
-			("postgresql-client" ,postgresql-client)
+		;;	("postgresql-client" ,postgresql-client)
 			))
   (synopsis "")
   (description "")
   (home-page "www.labsolns.com")
   (license license:gpl3+)))
 
+lnpg
