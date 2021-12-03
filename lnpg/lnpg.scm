@@ -52,8 +52,8 @@
 	 (system "echo \"export PGDATA=\\\"$HOME/lndata\\\"\" >> $HOME/.bashrc")
 	 (system "export PGDATA=$HOME/lndata")
 	 (system "initdb -D $HOME/lndata")
-	 (system "sed -i 's/host[ ]*all[ ]*all[ ]*127.0.0.1\/32[ ]*md5/host    all        all             127.0.0.1\/32        trust/' $HOME/lndata/pg_hba.conf")
-         (system "sed -i 's/\#listen_addresses =/listen_addresses =/'  $HOME/lndata/postgresql.conf")
+	 (system "sed -i 's/host[ ]*all[ ]*all[ ]*127.0.0.1\\/32[ ]*md5/host    all        all             127.0.0.1\\/32        trust/' $HOME/lndata/pg_hba.conf")
+         (system "sed -i 's/\\#listen_addresses =/listen_addresses =/'  $HOME/lndata/postgresql.conf")
  
 	 ;(system (string-append "cp " lnpg-store-dir "/scripts/pg_hba.conf $HOME/lndata"))
 	 ;(system (string-append "cp " lnpg-store-dir "/scripts/pg_ident.conf $HOME/lndata"))

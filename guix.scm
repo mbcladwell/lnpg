@@ -1,20 +1,20 @@
-(define-module (labsolns lnpg)
-  #:use-module (guix packages)
-  #:use-module ((guix licenses) #:prefix license:)
-  #:use-module (guix download)
-  #:use-module (guix build-system gnu)
-  #:use-module (gnu packages)
-  #:use-module (gnu packages databases)
-  ;;  #:use-module (labsolns postgresql-client)
-;;  #:use-module (artanis artanis)
-  
-  #:use-module (gnu packages autotools)
-  #:use-module (gnu packages guile)
-  #:use-module (gnu packages guile-xyz)
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages texinfo))
-  
-(define-public lnpg
+(use-modules
+  (guix packages)
+  ((guix licenses) #:prefix license:)
+  (guix download)
+  (guix build-system gnu)
+  (gnu packages)
+  (gnu packages databases)
+;;  (labsolns postgresql-client)
+ ;; (labsolns artanis)
+  (gnu packages autotools)
+  (gnu packages guile)
+  (gnu packages guile-xyz)
+  (gnu packages pkg-config)
+  (gnu packages texinfo)
+   (gnu packages maths)
+  )
+
 (package
   (name "lnpg")
   (version "0.1")
@@ -35,11 +35,7 @@
 					   (scripts-dir (string-append out "/scripts"))
 					   (bin-dir (string-append out "/bin"))
 					   (dummy (install-file "scripts/install-pg.sh" bin-dir))
-					   (dummy (mkdir-p scripts-dir))
-					   (home (getenv "$HOME"))
-					   (dummy (system*  "mkdir" "-p" "~/temp/test2222"))
-
-					   )            				       
+					   (dummy (mkdir-p scripts-dir)))            				       
 				       (copy-recursively "./scripts" scripts-dir)
 				       #t)))
 		       (add-after 'install 'wrap-install-pg
@@ -52,22 +48,21 @@
 				      #t)))	       
 		       )))
   (native-inputs
-    `(("autoconf" ,autoconf)
+    `( 
+    ("autoconf" ,autoconf)
       ("automake" ,automake)
       ("pkg-config" ,pkg-config)
-      ("texinfo" ,texinfo)    
+      ("texinfo" ,texinfo) 
+     ;; ("util-linux" ,util-linux)   
      ))
   (inputs `(("guile" ,guile-3.0)
-	  ;;  ("gnuplot" ,gnuplot))
-	  ))
-  (propagated-inputs `(
-		       ("artanis" ,artanis)
+	    ("gnuplot" ,gnuplot)))
+  (propagated-inputs `( ;("artanis" ,artanis)
 			("postgresql" ,postgresql)
-		;;	("postgresql-client" ,postgresql-client)
+			;;("postgresql-client" ,postgresql-client)
 			))
   (synopsis "")
   (description "")
   (home-page "www.labsolns.com")
-  (license license:gpl3+)))
+  (license license:gpl3+))
 
-lnpg

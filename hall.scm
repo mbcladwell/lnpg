@@ -11,10 +11,7 @@
   (dependencies `())
   (skip ())
   (files (libraries
-           ((directory
-              "lnpg"
-              ((scheme-file "artass") (scheme-file "gplot")))
-            (scheme-file "lnpg")))
+           ((directory "lnpg" ()) (scheme-file "lnpg")))
          (tests ((directory "tests" ())))
          (programs ((directory "scripts" ())))
          (documentation

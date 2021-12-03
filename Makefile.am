@@ -32,9 +32,7 @@ SUFFIXES = .scm .go
 .scm.go:
 	$(AM_V_GEN)$(top_builddir)/pre-inst-env $(GUILE_TOOLS) compile $(GUILE_WARNINGS) -o "$@" "$<"
 
-SOURCES = lnpg/artass.scm \
-          lnpg/gplot.scm \
-          lnpg/lnpg.scm \
+SOURCES = lnpg/lnpg.scm \
           lnpg.scm
 
 TESTS = 

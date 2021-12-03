@@ -18,6 +18,11 @@ rm ./lnpg-0.1.tar.gz
 hall init --convert --author "mbc" lnpg --execute
 hall scan -x
 hall build -x
-cp /home/mbc/syncd/tobedeleted/testfiles/guix.scm .
+cp /home/mbc/syncd/tobedeleted/lnpgaccessories/guix.scm .
 cp /home/mbc/syncd/tobedeleted/psqlfiles/*.* ./scripts
 
+autoreconf -vif && ./configure && make
+cp /home/mbc/syncd/tobedeleted/lnpgaccessories/Makefile.am .
+make dist
+guix package --install-from-file=guix.scm
+source /home/mbc/.guix-profile/etc/profile
