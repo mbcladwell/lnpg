@@ -45,6 +45,39 @@ prompt_yes_no() {
     done
 }
 
+welcome()
+{
+    cat<<"EOF"
+
+ _______________________  |  _ |_  _  _ _ _|_ _  _         
+|O O O O O O O O O O O O| |_(_||_)(_)| (_| | (_)| \/       
+|O O O O O O 1 O O O O O|                         /        
+|O O O O O O O O O O O O|  /\    _|_ _  _ _  _ _|_. _  _   
+|O O O O O O O O O O O O| /~~\|_| | (_)| | |(_| | |(_)| |  
+|O O 1 O O O O O 1 O 1 O|  _                               
+|O O O O O O O O O O O O| (  _ |   _|_. _  _  _            
+|O O O 1 O O O O O O O O| _)(_)||_| | |(_)| |_)    
+|O O O O O O O O O O O O|
+ -----------------------  info@labsolns.com
+
+This script installs LIMS*Nucleus on your system
+
+http://www.labsolns.com
+
+EOF
+    echo -n "Press return to continue..."
+    read -r
+}
+
+query()
+{
+    echo Enter IP address:
+    read IPADDRESS
+    
+    echo Maximum number of plates per plate set:
+    read MAXNUMPLATES
+}
+
 
 updatesys()
 {
@@ -57,37 +90,59 @@ wget 'https://sv.gnu.org/people/viewgpg.php?user_id=127547' -qO - | sudo -i gpg 
   
 }
 
-installguix()
+guixinstall()
 {
+    wget 'https://sv.gnu.org/people/viewgpg.php?user_id=15145' -qO - | sudo -i gpg --import -
+    wget 'https://sv.gnu.org/people/viewgpg.php?user_id=127547' -qO - | sudo -i gpg --import -
 
-git clone https://github.com/mbcladwell/labsolns.git
+    git clone --depth 1 https://github.com/mbcladwell/ln10.git 
 
+    sudo ./ln10/guix-install-mod.sh
 
- sudo /home/admin/labsolns/scripts/guix-install-mod.sh
- ##guix pull
-source /home/admin/.guix-profile/etc/profile 
+  ## using guile-3.0.2
+    guix install glibc-utf8-locales guile-dbi
+    sudo guix install glibc-utf8-locales
+    export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"
+             
+    guix package --install-from-file=/home/admin/ln10/lnpg.scm
 
- guix package --profile=/home/admin/aux-profile -i guile-dbi
+##    mkdir /home/admin/.configure
+##    mkdir /home/admin/.configure/limsn
+##    cp /home/admin/ln10/artanis.conf /home/admin/.configure/limsn
 
-## using guile-3.0.2    use the option "--allow-collisions" of "guix package"
-guix install glibc-utf8-locales guile-lib postgresql@13.1 guile@3.0.2
-sudo guix install glibc-utf8-locales
+##    sudo sed -i "s/host.name = 127.0.0.1/host.name = $IPADDRESS/" /home/admin/.configure/limsn/artanis.conf
+##    sudo sed -i "s/cookie.maxplates = 100/cookie.maxplates = $MAXNUMPLATES/"  /home/admin/.configure/limsn/artanis.conf
+
     
-# After setting `PATH', run `hash guix' to make sure your shell refers to `/home/admin/.config/guix/current/bin/guix'.
-#$ echo $PATH
-#/home/admin/.config/guix/current/bin:/usr/local/bin:/usr/bin:/bin:/usr/local/games:/usr/games
-         
+    source /home/admin/.guix-profile/etc/profile     
+     export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale"    
 
 
-cd /home/admin/labsolns
+}
 
-## install of lnpg.scm
-guix package --install-from-file=guix.scm
+initdb()
+{
+    _msg "configuring db"
 
+    ## note this must be in separate script:
+##    /home/admin/ln10/install-lnpg.sh
+
+#source /home/admin/.guix-profile/etc/profile 
+ #   export LC_ALL="C"
+    
+  #  sudo chmod -R a=rwx /home/admin/ln10
+
+#mkdir lndata
+
+#echo "export PGDATA=\"/home/admin/lndata\"" >> /home/admin/.bashrc
+#export PGDATA="/home/admin/lndata"
 
 guile -e main -s labsolns.scm 127.0.0.1 5432 ln_admin welcome lndb init           
 
+    
 }
+
+
 
 
 

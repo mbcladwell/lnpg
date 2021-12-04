@@ -48,7 +48,9 @@
 (define (init-fresh-local pg-pgdb pg-lndb)
   ;;used for local installation
   ;;config files used to provide unrestricted access to ln_admin
-  (begin (system "mkdir $HOME/lndata" )
+  (begin
+    (system "export LC_ALL=\"C\"")
+    (system "mkdir $HOME/lndata" )
 	 (system "echo \"export PGDATA=\\\"$HOME/lndata\\\"\" >> $HOME/.bashrc")
 	 (system "export PGDATA=$HOME/lndata")
 	 (system "initdb -D $HOME/lndata")
