@@ -42,9 +42,16 @@
 				  (lambda* (#:key inputs outputs #:allow-other-keys)
 				    (let* ((out (assoc-ref outputs "out"))
 					   (bin-dir (string-append out "/bin"))
+					    (scm  "/share/guile/site/3.0")
+					    (go   "/lib/guile/3.0/site-ccache")
 					   (dummy (chmod (string-append out "/bin/install-pg.sh") #o555 ))) ;;read execute, no write
 				      (wrap-program (string-append out "/bin/install-pg.sh")
-						    `( "PATH" ":" prefix  (,bin-dir) ))		    
+						    `( "PATH" ":" prefix  (,bin-dir) )
+						     `("GUILE_LOAD_PATH" prefix
+						       (,(string-append out scm)))						
+						     `("GUILE_LOAD_COMPILED_PATH" prefix
+						       (,(string-append out go)))
+						     )		    
 				      #t)))	       
 		       )))
   (native-inputs
