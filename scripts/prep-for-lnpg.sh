@@ -60,17 +60,17 @@ wget 'https://sv.gnu.org/people/viewgpg.php?user_id=127547' -qO - | sudo -i gpg 
 installguix()
 {
 
-git clone https://github.com/mbcladwell/labsolns.git
+git clone https://github.com/mbcladwell/lnpg.git
 
 
- sudo /home/admin/labsolns/scripts/guix-install-mod.sh
+ sudo /home/admin/lnpg/scripts/guix-install-mod.sh
  ##guix pull
 source /home/admin/.guix-profile/etc/profile 
 
  guix package --profile=/home/admin/aux-profile -i guile-dbi
 
 ## using guile-3.0.2    use the option "--allow-collisions" of "guix package"
-guix install glibc-utf8-locales guile-lib postgresql@13.1 guile@3.0.2
+guix install glibc-utf8-locales guile-lib guile@3.0.2
 sudo guix install glibc-utf8-locales
     
 # After setting `PATH', run `hash guix' to make sure your shell refers to `/home/admin/.config/guix/current/bin/guix'.
@@ -79,13 +79,13 @@ sudo guix install glibc-utf8-locales
          
 
 
-cd /home/admin/labsolns
+cd /home/admin/lnpg
 
 ## install of lnpg.scm
 guix package --install-from-file=guix.scm
 
 
-install-pg.scm 127.0.0.1 5432 ln_admin welcome lndb init           
+install-pg.sh 127.0.0.1 5432 ln_admin welcome lndb init           
 
 }
 
