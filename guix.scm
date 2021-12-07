@@ -24,7 +24,7 @@
 			#:phases (modify-phases %standard-phases
     		       (add-after 'unpack 'patch-prefix
 			       (lambda* (#:key inputs outputs #:allow-other-keys)
-				 (substitute* '("scripts/install-pg.sh"
+				 (substitute* '("scripts/lnpg.sh"
 						"lnpg/lnpg.scm")
 						(("abcdefgh")
 						(assoc-ref outputs "out" )) )
@@ -34,18 +34,18 @@
 				    (let* ((out  (assoc-ref outputs "out"))
 					   (scripts-dir (string-append out "/scripts"))
 					   (bin-dir (string-append out "/bin"))
-					   (dummy (install-file "scripts/install-pg.sh" bin-dir))
+					   (dummy (install-file "scripts/lnpg.sh" bin-dir))
 					   (dummy (mkdir-p scripts-dir)))            				       
 				       (copy-recursively "./scripts" scripts-dir)
 				       #t)))
-		       (add-after 'install 'wrap-install-pg
+		       (add-after 'install 'wrap-lnpg
 				  (lambda* (#:key inputs outputs #:allow-other-keys)
 				    (let* ((out (assoc-ref outputs "out"))
 					   (bin-dir (string-append out "/bin"))
 					    (scm  "/share/guile/site/3.0")
 					    (go   "/lib/guile/3.0/site-ccache")
-					   (dummy (chmod (string-append out "/bin/install-pg.sh") #o555 ))) ;;read execute, no write
-				      (wrap-program (string-append out "/bin/install-pg.sh")
+					   (dummy (chmod (string-append out "/bin/lnpg.sh") #o555 ))) ;;read execute, no write
+				      (wrap-program (string-append out "/bin/lnpg.sh")
 						    `( "PATH" ":" prefix  (,bin-dir) )
 						     `("GUILE_LOAD_PATH" prefix
 						       (,(string-append out scm)))						

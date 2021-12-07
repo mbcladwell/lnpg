@@ -46,6 +46,40 @@ prompt_yes_no() {
 }
 
 
+welcome()
+{
+    cat<<"EOF"
+
+ _______________________  |  _ |_  _  _ _ _|_ _  _         
+|O O O O O O O O O O O O| |_(_||_)(_)| (_| | (_)| \/       
+|O O O O O O 1 O O O O O|                         /        
+|O O O O O O O O O O O O|  /\    _|_ _  _ _  _ _|_. _  _   
+|O O O O O O O O O O O O| /~~\|_| | (_)| | |(_| | |(_)| |  
+|O O 1 O O O O O 1 O 1 O|  _                               
+|O O O O O O O O O O O O| (  _ |   _|_. _  _  _            
+|O O O 1 O O O O O O O O| _)(_)||_| | |(_)| |_)    
+|O O O O O O O O O O O O|
+ -----------------------  info@labsolns.com
+
+This script installs LIMS*Nucleus on your system
+
+http://www.labsolns.com
+
+EOF
+    echo -n "Press return to continue..."
+    read -r
+}
+
+
+query()
+{
+    echo Enter IP address:
+    read IPADDRESS
+    
+    echo Maximum number of plates per plate set:
+    read MAXNUMPLATES
+}
+
 updatesys()
 {
 
@@ -60,10 +94,10 @@ wget 'https://sv.gnu.org/people/viewgpg.php?user_id=127547' -qO - | sudo -i gpg 
 installguix()
 {
 
-git clone https://github.com/mbcladwell/lnpg.git
+git clone https://github.com/mbcladwell/limsn.git
 
 
- sudo /home/admin/lnpg/scripts/guix-install-mod.sh
+ sudo /home/admin/limsn/scripts/guix-install-mod.sh
  ##guix pull
 source /home/admin/.guix-profile/etc/profile 
 
@@ -79,33 +113,17 @@ sudo guix install glibc-utf8-locales
          
 
 
-cd /home/admin/lnpg
+cd /home/admin/limsn
 
 ## install of lnpg.scm
-guix package --install-from-file=guix.scm
+guix package --install-from-file=artanis51.scm
+guix package --install-from-file=lnpgrecipe.scm
 
 
-install-pg.sh 127.0.0.1 5432 ln_admin welcome lndb init           
+lnpg.sh 127.0.0.1 5432 ln_admin welcome lndb init           
 
 }
 
-
-
-configure()
-{
-
-echo "export GUIX_PROFILE=\"/home/admin/.guix-profile\"" >> /home/admin/.bashrc
-echo " . \"/home/admin/.guix-profile/etc/profile\"" >> /home/admin/.bashrc
-echo "export LC_ALL=\"C\"" >> /home/admin/.bashrc
-echo "export GUIX_LOCPATH=\"$HOME/.guix-profile/lib/locale\"" >> /home/admin/.bashrc
-
-
-export GUIX_PROFILE="/home/admin/.guix-profile"
-export LC_ALL="C"
-export GUIX_LOCPATH="$HOME/.guix-profile/lib/locale" 
-
-    
-}
 
 
 main()
@@ -114,8 +132,9 @@ main()
     export DEBIAN_FRONTEND=noninteractive 
     _msg "Starting installation ($(date))"
     
+    welcome
+    query
     updatesys
-    configure
     installguix
     
    
